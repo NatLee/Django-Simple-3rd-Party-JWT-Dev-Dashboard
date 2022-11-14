@@ -1,5 +1,6 @@
 include pyproject.toml
 include *.md
+include *.sh
 include LICENSE
 recursive-include src *
 recursive-include src/django_simple_third_party_jwt_dev_dashboard/templates *
