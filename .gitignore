@@ -1,0 +1,15 @@
+
+*.egg-info
+
+__pycache__
+
+.DS_Store
+
+desktop.ini
+
+*.sqlite3
+
+dist
+
+*.tar.gz
+

@@ -1,0 +1,121 @@
+{% load bootstrap3 %}
+<!--              -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id"
+        content="{{ social_google_client_id }}">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/fontawesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'dev_dashboard' %}">Dev</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+
+                {% if swagger_url|length %}
+                <li><a href="/{{ swagger_url }}"><span class="glyphicon glyphicon-log-in"></span> Swagger </a></li>
+                {% endif %}
+                
+                {% if redoc_url|length %}
+                <li><a href="/{{ redoc_url }}"><span class="glyphicon glyphicon-log-in"></span> Redoc </a></li>
+                {% endif %}
+                
+                {% if request.user.is_authenticated %}
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Hello {{ request.user }}</a></li>
+                {% else %}
+                <li><a href="{% url 'dev_jwt_login' %}"><span class="glyphicon glyphicon-log-in"></span> JWT Login</a></li>
+                <li><a href="/{{ admin_url }}/login/?next=/{{ dashboard_url }}"><span
+                            class="glyphicon glyphicon-log-in"></span>
+                        Session Login</a></li>
+                {% endif %}
+                <li><a href="#" onclick=logout()><span class="glyphicon glyphicon-log-in"></span> JWT Logout</a></li>
+                <li><a href="/{{ admin_url }}/logout/?next=/{{ dashboard_url }}"><span
+                            class="glyphicon glyphicon-log-in"></span>
+                        Session Logout</a></li>
+                <li>
+                    <div id="g_id_onload"
+                        data-client_id="{{ social_google_client_id }}"
+                        data-callback="get_jwt_using_google_credential" </div>
+                        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"
+                            data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
+                        </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+
+<script>
+    function get_jwt_using_google_credential(data) {
+        const credential = data.credential;
+        $.ajax({
+            method: "POST",
+            url: "/{{ third_party_jwt_url }}/token",
+            data: { credential: credential }
+        }).done(function (data) {
+            const access_token = data.access;
+            const refresh_token = data.refresh_token;
+            localStorage.setItem('access', access_token);
+            localStorage.setItem('refresh', refresh_token);
+            console.log('Google Login');
+            $.ajax({
+                type: "POST",
+                url: "/{{ jwt_verify_url }}",
+                data: {"token":access_token},
+                headers: {
+                    "Authorization": "Bearer" + " " + access_token
+                },
+                success: function (data) {
+                    var json_string = JSON.stringify(data, null, 2);
+                    console.log(data);
+                    $('#token').text('Bearer ' + access_token);
+                    $('#token').css('color', 'green');
+                    $('#result').text('3rd party login!');
+                    if(json_string){
+                        $('#result').append(" Token verified successfully!");
+                    }
+                    $('#result').css('color', 'blue').css('white-space', 'pre-line');
+                },
+                error: function (data) {
+                    var result = "please login " + data.responseText;
+                    $("#result").text(result).css('color', 'red');
+                }
+            });
+        });
+    }
+</script>
+
+
+<script>
+    function logout() {
+      window.localStorage.removeItem("jwt_token");
+      window.localStorage.removeItem("jwt_token_refresh");
+      window.localStorage.removeItem("access");
+      window.localStorage.removeItem("refresh");
+      window.location.href = "/{{ dashboard_url }}";
+    }
+  </script>
+
+</html>

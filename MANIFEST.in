@@ -1,0 +1,8 @@
+include pyproject.toml
+include *.md
+include LICENSE
+recursive-include src *
+recursive-include src/django_simple_third_party_jwt_dev_dashboard/templates *
+recursive-include src/django_simple_third_party_jwt_dev_dashboard/statics *
+recursive-include tests test*.py
+recursive-include example *
