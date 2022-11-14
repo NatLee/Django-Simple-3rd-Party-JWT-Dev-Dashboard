@@ -120,6 +120,10 @@ And visit `http://localhost:8000/api/__hidden_dev_dashboard`
 
 ![dashboard](https://i.imgur.com/cXwg2DS.png)
 
+## Example
+
+Check `./example/django_simple_third_party_jwt_dev_dashboard_example/`.
+
 ## More
 
 There are several different settings can be added with this dashboard if you need.
