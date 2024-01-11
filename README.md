@@ -204,3 +204,20 @@ SIMPLE_JWT = {
 # -------------- END - SimpleJWT Setting --------------
 
 ```
+
+
+## Misc tools
+
+### Install & re-install package
+
+* Linux
+
+```bash
+bash dev-reinstall.sh
+```
+
+* Windows
+
+```powershell
+./dev-reinstall.ps1
+```
