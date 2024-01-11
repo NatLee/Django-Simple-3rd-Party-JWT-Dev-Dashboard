@@ -24,7 +24,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="{% url 'dev_dashboard' %}">Dev</a>
+                <a class="navbar-brand" href="{% url 'dev-dashboard' %}">Dev</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
 
@@ -37,17 +37,19 @@
                 {% endif %}
                 
                 {% if request.user.is_authenticated %}
+
                 <li><a href="#"><span class="glyphicon glyphicon-user"></span> Hello {{ request.user }}</a></li>
+                <li><a href="/{{ dashboard_url }}/logout"><span class="glyphicon glyphicon-log-in"></span>Session Logout</a></li>
+                
                 {% else %}
-                <li><a href="{% url 'dev_jwt_login' %}"><span class="glyphicon glyphicon-log-in"></span> JWT Login</a></li>
-                <li><a href="/{{ admin_url }}/login/?next=/{{ dashboard_url }}"><span
-                            class="glyphicon glyphicon-log-in"></span>
-                        Session Login</a></li>
+
+                <li><a href="{% url 'dev-jwt-login' %}"><span class="glyphicon glyphicon-log-in"></span> JWT Login</a></li>
+                <li><a href="/{{ admin_url }}/login/?next=/{{ dashboard_url }}"><span class="glyphicon glyphicon-log-in"></span>Session Login</a></li>
+
                 {% endif %}
+
                 <li><a href="#" onclick=logout()><span class="glyphicon glyphicon-log-in"></span> JWT Logout</a></li>
-                <li><a href="/{{ admin_url }}/logout/?next=/{{ dashboard_url }}"><span
-                            class="glyphicon glyphicon-log-in"></span>
-                        Session Logout</a></li>
+
                 <li>
                     <div id="g_id_onload"
                         data-client_id="{{ social_google_client_id }}"
@@ -56,6 +58,10 @@
                             data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
                         </div>
                 </li>
+                <button id="microsoft-login-button" class="btn" onclick="location.href='/{{ microsoft_signin_path }}';">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" alt="Microsoft logo" style="width: 30px; height: 30px;">
+                    Login with Microsoft
+                </button>
             </ul>
         </div>
     </nav>
@@ -72,13 +78,13 @@
         const credential = data.credential;
         $.ajax({
             method: "POST",
-            url: "/{{ third_party_jwt_url }}/token",
+            url: "/{{ third_party_jwt_url }}/auth/google/token",
             data: { credential: credential }
         }).done(function (data) {
             const access_token = data.access;
             const refresh_token = data.refresh_token;
-            localStorage.setItem('access', access_token);
-            localStorage.setItem('refresh', refresh_token);
+            localStorage.setItem('access_token', access_token);
+            localStorage.setItem('refresh_token', refresh_token);
             console.log('Google Login');
             $.ajax({
                 type: "POST",
@@ -110,10 +116,8 @@
 
 <script>
     function logout() {
-      window.localStorage.removeItem("jwt_token");
-      window.localStorage.removeItem("jwt_token_refresh");
-      window.localStorage.removeItem("access");
-      window.localStorage.removeItem("refresh");
+      window.localStorage.removeItem("access_token");
+      window.localStorage.removeItem("refresh_token");
       window.location.href = "/{{ dashboard_url }}";
     }
   </script>

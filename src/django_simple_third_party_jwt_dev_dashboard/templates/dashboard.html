@@ -12,6 +12,11 @@
 <h2>Google Client ID</h2>
 <div class="container">{{ social_google_client_id }}</div>
 
+<h2>Microsoft Client ID</h2>
+<div class="container">
+    {{ social_microsoft_client_id }}
+</div>
+
 <h2>JWT Field</h2>
 <h3>---------------------------</h3>
 <div class="container">
@@ -35,21 +40,21 @@
 {% endif %}
 
 <script>
-  var jwt_token = localStorage.getItem("access");
-  var jwt_token_refresh = localStorage.getItem("refresh");
-
-  data = {
-    refresh: jwt_token_refresh,
-  };
+  var jwt_token = localStorage.getItem("access_token");
+  var jwt_token_refresh = localStorage.getItem("refresh_token");
 
   if (jwt_token) {
+    // 測試 JWT refresh API是否有效
     $.ajax({
       type: "POST",
       url: "/{{ jwt_refresh_url }}",
-      data: data,
+      data: {
+        refresh: jwt_token_refresh,
+      },
       success: function (data) {
-        localStorage.setItem("access", data.access);
+        localStorage.setItem("access_token", data.access);
         const jwt_token = data.access;
+        // 測試 JWT verify API是否有效
         $.ajax({
           type: "POST",
           url: "/{{ jwt_verify_url }}",
