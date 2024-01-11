@@ -21,6 +21,8 @@ debug = django_settings.DEBUG
 
 dev_dashboard_setting = {
     'social_google_client_id': settings.SOCIAL_GOOGLE_CLIENT_ID,
+    'social_microsoft_client_id': settings.SOCIAL_MICROSOFT_CLIENT_ID,
+    'microsoft_signin_path': settings.MICROSOFT_SIGNIN_PATH,
     'jwt_token_url': jwt_token_url,
     'jwt_refresh_url': jwt_refresh_url,
     'jwt_verify_url': jwt_verify_url,
@@ -36,7 +38,7 @@ dev_dashboard_setting = {
 def dashboard(request):
     return render(
         request,
-        "dashboard/dashboard.html",
+        "dashboard.html",
         dev_dashboard_setting
     )
 
@@ -48,4 +50,19 @@ def jwt_login(request):
         "login.html",
         dev_dashboard_setting_
     )
+
+
+
+# override session logout
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+
+@csrf_exempt
+@login_required
+def session_logout(request):
+    auth_logout(request)
+    return HttpResponseRedirect(reverse('dev-dashboard'))
 
