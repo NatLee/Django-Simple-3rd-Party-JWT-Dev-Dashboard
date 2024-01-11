@@ -25,12 +25,12 @@ Check it in [Pypi](https://pypi.org/project/django-simple-third-party-jwt-dev-da
       # ---------------------------
       # debug relative package
       "rest_framework", # <------ MUST
-      #"drf_yasg", # for swagger, optional
+      #"drf_yasg", # (OPTIONAL) for swagger
       'bootstrap3', # <------ MUST
-      # debug dashboard
-      'django_simple_third_party_jwt_dev_dashboard', # <------ MUST
       # 3rd party login
       'django_simple_third_party_jwt' # <------ MUST
+      # debug dashboard
+      'django_simple_third_party_jwt_dev_dashboard', # <------ MUST
       # ---------------------------
   ]
   ```
@@ -44,12 +44,18 @@ Check it in [Pypi](https://pypi.org/project/django-simple-third-party-jwt-dev-da
       'jwt_refresh_url': 'api/auth/token/refresh',
       'jwt_verify_url': 'api/auth/token/verify',
       'dashboard_url': 'api/__hidden_dev_dashboard',
-      'third_party_jwt_url': 'api/auth/google',
+      'third_party_jwt_url': 'api',
       'admin_url': 'api/__hidden_admin',
-      #'swagger_url': 'api/__hidden_swagger', # optional
-      #'redoc_url': 'api/__hidden_redoc', # optional
+      #'swagger_url': 'api/__hidden_swagger', # OPTIONAL
+      #'redoc_url': 'api/__hidden_redoc', # OPTIONAL
   }
   # --------------- END - Dashboard Setting -----------------
+
+  # -------------- START - 3rd party login Setting --------------
+  LOGIN_REDIRECT_URL = '/' + DEV_DASHBOARD_SETTINGS['dashboard_url'] # <- (OPTIONAL) for redirect after login
+  MICROSOFT_CALLBACK_PATH = "api/auth/microsoft/callback" # <- (OPTIONAL) for microsoft login
+  MICROSOFT_SIGNIN_PATH = "api/auth/microsoft/signin" # <- (OPTIONAL) for microsoft login
+  # --------------- END - 3rd party login Setting -----------------
   ```
 
   - (MUST) Policy for Google API
@@ -62,20 +68,45 @@ Check it in [Pypi](https://pypi.org/project/django-simple-third-party-jwt-dev-da
   # -------------- END - Policy Setting -----------------
   ```
 
-  - (Optional) Configuration for Google Login(default)
+  - (OPTIONAL) Configuration for 3rd party login
 
   ```python
+  VALID_REGISTER_DOMAINS = ["gmail.com", "hotmail.com"]
+
   # -------------- START - Google Auth Setting --------------
-  SOCIAL_GOOGLE_CLIENT_ID = "376808175534-d6mefo6b1kqih3grjjose2euree2g3cs.apps.googleusercontent.com" # default
-  VALID_REGISTER_DOMAINS = ["gmail.com"] # default
+  SOCIAL_GOOGLE_CLIENT_ID = "376808175534-d6mefo6b1kqih3grjjose2euree2g3cs.apps.googleusercontent.com"
   # --------------- END - Google Auth Setting -----------------
+
+  # -------------- START - Microsoft Auth Setting --------------
+  SOCIAL_MICROSOFT_CLIENT_ID = '32346173-22bc-43b2-b6ed-f88f6a76e38c'
+  SOCIAL_MICROSOFT_CLIENT_SECRET = 'K5z8Q~dIXDiFN5qjMjRjIx34cZOJ3Glkrg.dxcG9'
+  # --------------- END - Microsoft Auth Setting -----------------
+
   ```
 
-  > You can regist `SOCIAL_GOOGLE_CLIENT_ID` on Google Cloud Platform.
+> You can regist `SOCIAL_GOOGLE_CLIENT_ID` on Google Cloud Platform.
 
-  ![](https://i.imgur.com/7UKP3I7.png)
+  [Google Colud | API和服務 | 憑證](https://console.cloud.google.com/apis/credentials)
 
-  ![](https://i.imgur.com/IoTRs4j.png)
+  1. Create a new project and create a new OAuth 2.0 Client ID.
+    ![](https://i.imgur.com/7UKP3I7.png)
+
+  2. Add `http://localhost:8000` to `Authorized JavaScript origins` and `Authorized redirect URIs`.
+    ![](https://i.imgur.com/IoTRs4j.png)
+
+> You can regist `SOCIAL_MICROSOFT_CLIENT_ID` on Microsoft Azure.
+
+[Microsoft Entra 識別碼 | 應用程式註冊](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps)
+
+  1. Create a new application.
+    ![](https://i.imgur.com/my5UtXv.png)
+  2. Add `http://localhost:8000/api/auth/microsoft/callback` to `Redirect URIs`
+    ![](https://i.imgur.com/lsaZgMM.png)
+  3. Get `Client ID` from `Overview` page.
+    ![](https://i.imgur.com/5oo3xnI.png)
+  4. Get `Client Secret` from `Certificates & secrets` page.
+    ![](https://i.imgur.com/3F5ge7l.png)
+
 
 - `urls.py`
 
@@ -85,7 +116,6 @@ Check it in [Pypi](https://pypi.org/project/django-simple-third-party-jwt-dev-da
   # --------------- 3rd party login
   # app route
   urlpatterns += [
-      # google login
       path(settings.DEV_DASHBOARD_SETTINGS['third_party_jwt_url'] + "/", include("django_simple_third_party_jwt.urls")),
   ]
   # ------------------------------
@@ -204,7 +234,6 @@ SIMPLE_JWT = {
 # -------------- END - SimpleJWT Setting --------------
 
 ```
-
 
 ## Misc tools
 
