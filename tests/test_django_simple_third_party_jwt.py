@@ -1,7 +1,7 @@
 from django.test import TestCase
 from mock import Mock, patch
 
-from django_simple_third_party_jwt.views import GoogleLogin
+from django_simple_third_party_jwt.views.google.token_login import GoogleLogin
 
 class LoginViewTests(TestCase):
 
