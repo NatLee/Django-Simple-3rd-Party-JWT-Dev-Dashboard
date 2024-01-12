@@ -1,5 +1,7 @@
 # Django Simple 3rd Party JWT Dev Dashboard
 
+![dashboard](https://i.imgur.com/qrGkUZM.png)
+
 This is a simple dashboard for showing multi login(JWT, session and 3rd party).
 
 Dashboard is used with [Django-Simple-3rd-Party-JWT](https://github.com/NatLee/Django-Simple-3rd-Party-JWT).
@@ -151,8 +153,6 @@ python manage.py runserver 0.0.0.0:8000
 ```
 
 And visit `http://localhost:8000/api/__hidden_dev_dashboard`
-
-![dashboard](https://i.imgur.com/cXwg2DS.png)
 
 ## Example
 
