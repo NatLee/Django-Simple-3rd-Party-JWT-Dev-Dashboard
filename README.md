@@ -53,8 +53,7 @@ Check it in [Pypi](https://pypi.org/project/django-simple-third-party-jwt-dev-da
 
   # -------------- START - 3rd party login Setting --------------
   LOGIN_REDIRECT_URL = '/' + DEV_DASHBOARD_SETTINGS['dashboard_url'] # <- (OPTIONAL) for redirect after login
-  MICROSOFT_CALLBACK_PATH = "api/auth/microsoft/callback" # <- (OPTIONAL) for microsoft login
-  MICROSOFT_SIGNIN_PATH = "api/auth/microsoft/signin" # <- (OPTIONAL) for microsoft login
+  JWT_3RD_PREFIX = 'api' # <- (OPTIONAL) for 3rd party login
   # --------------- END - 3rd party login Setting -----------------
   ```
 
