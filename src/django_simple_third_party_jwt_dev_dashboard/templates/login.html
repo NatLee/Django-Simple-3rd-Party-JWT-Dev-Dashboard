@@ -17,9 +17,13 @@
         <input type="hidden" name="next" value="{{ next }}" />
         <hr />
         {% buttons %}
-        <button type="submit" class="btn btn-lg btn-outline-primary btn-block">
-          <i class="glyphicon glyphicon-log-in" id="btn-submit"></i>
-          JWT Login
+        <!-- JWT Login Button -->
+        <button type="submit" name="action" value="jwt" class="btn btn-lg btn-outline-primary btn-block">
+          <i class="glyphicon glyphicon-log-in"></i> JWT Login
+        </button>
+        <!-- Session Login Button -->
+        <button type="submit" name="action" value="session" class="btn btn-lg btn-outline-secondary btn-block">
+          <i class="glyphicon glyphicon-log-in"></i> Session Login
         </button>
         {% endbuttons %}
       </form>
@@ -30,18 +34,36 @@
 <script>
   $("form").on("submit", function (event) {
     event.preventDefault();
-
-    $.ajax({
-      type: "POST",
-      url: "/{{ jwt_token_url }}",
-      data: $(this).serialize(),
-      success: function (data) {
-        localStorage.setItem('refresh_token', data.refresh);
-        localStorage.setItem('access_token', data.access);
-        window.location.href = "/{{ dashboard_url }}";
-      },
-    });
+  
+    let action = $(this).find("button[type=submit]:focus").val();
+  
+    if (action === 'jwt') {
+      // JWT Login logic
+      $.ajax({
+        type: "POST",
+        url: "/{{ jwt_token_url }}",
+        data: $(this).serialize(),
+        success: function (data) {
+          console.log(data);
+          localStorage.setItem('refresh_token', data.refresh);
+          localStorage.setItem('access_token', data.access);
+          window.location.href = "/{{ dashboard_url }}";
+        }
+      });
+    } else if (action === 'session') {
+      // Session Login logic
+      $.ajax({
+        type: "POST",
+        url: "/{{ dashboard_url }}/login",
+        data: $(this).serialize(),
+        success: function (data) {
+          console.log(data);
+          window.location.href = "/{{ dashboard_url }}";
+        }
+      });
+    }
   });
+  
 </script>
 
 {% endblock %}

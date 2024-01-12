@@ -28,6 +28,10 @@
             </div>
             <ul class="nav navbar-nav navbar-right">
 
+                {% if admin_url|length %}
+                <li><a href="/{{ admin_url }}"><span class="glyphicon glyphicon-log-in"></span> Admin </a></li>
+                {% endif %}
+
                 {% if swagger_url|length %}
                 <li><a href="/{{ swagger_url }}"><span class="glyphicon glyphicon-log-in"></span> Swagger </a></li>
                 {% endif %}
@@ -36,15 +40,12 @@
                 <li><a href="/{{ redoc_url }}"><span class="glyphicon glyphicon-log-in"></span> Redoc </a></li>
                 {% endif %}
                 
+                <li><a href="{% url 'dev-session-login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+
                 {% if request.user.is_authenticated %}
 
                 <li><a href="#"><span class="glyphicon glyphicon-user"></span> Hello {{ request.user }}</a></li>
                 <li><a href="/{{ dashboard_url }}/logout"><span class="glyphicon glyphicon-log-in"></span>Session Logout</a></li>
-                
-                {% else %}
-
-                <li><a href="{% url 'dev-jwt-login' %}"><span class="glyphicon glyphicon-log-in"></span> JWT Login</a></li>
-                <li><a href="/{{ admin_url }}/login/?next=/{{ dashboard_url }}"><span class="glyphicon glyphicon-log-in"></span>Session Login</a></li>
 
                 {% endif %}
 
@@ -58,7 +59,7 @@
                             data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
                         </div>
                 </li>
-                <button id="microsoft-login-button" class="btn" onclick="location.href='/{{ microsoft_signin_path }}';">
+                <button id="microsoft-login-button" class="btn" onclick="location.href='/{{ third_party_jwt_url }}/auth/microsoft/signin';">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" alt="Microsoft logo" style="width: 30px; height: 30px;">
                     Login with Microsoft
                 </button>
