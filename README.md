@@ -44,7 +44,6 @@ Check it in [Pypi](https://pypi.org/project/django-simple-third-party-jwt-dev-da
       'jwt_refresh_url': 'api/auth/token/refresh',
       'jwt_verify_url': 'api/auth/token/verify',
       'dashboard_url': 'api/__hidden_dev_dashboard',
-      'third_party_jwt_url': 'api',
       'admin_url': 'api/__hidden_admin',
       #'swagger_url': 'api/__hidden_swagger', # OPTIONAL
       #'redoc_url': 'api/__hidden_redoc', # OPTIONAL
@@ -115,7 +114,7 @@ Check it in [Pypi](https://pypi.org/project/django-simple-third-party-jwt-dev-da
   # --------------- 3rd party login
   # app route
   urlpatterns += [
-      path(settings.DEV_DASHBOARD_SETTINGS['third_party_jwt_url'] + "/", include("django_simple_third_party_jwt.urls")),
+      path("", include("django_simple_third_party_jwt.urls")),
   ]
   # ------------------------------
 
