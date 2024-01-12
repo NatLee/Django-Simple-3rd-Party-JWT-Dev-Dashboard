@@ -50,7 +50,7 @@ setuptools.setup(
     install_requires=[
         'django>=4.0.0',
         'djangorestframework',
-        'django-simple-third-party-jwt>=0.1.1',
+        'django-simple-third-party-jwt>=0.2.0',
         'drf-yasg',
         'django-bootstrap3'
     ],

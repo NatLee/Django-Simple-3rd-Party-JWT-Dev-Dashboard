@@ -25,7 +25,7 @@ urlpatterns = []
 # --------------- 3rd party login
 # app route
 urlpatterns += [
-    path(settings.DEV_DASHBOARD_SETTINGS['third_party_jwt_url'] + "/", include("django_simple_third_party_jwt.urls")),
+    path("", include("django_simple_third_party_jwt.urls")),
 ]
 # ------------------------------
 

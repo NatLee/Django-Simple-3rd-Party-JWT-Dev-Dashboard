@@ -157,8 +157,7 @@ DEV_DASHBOARD_SETTINGS = {
 
 # New settings for django_simple_third_party_jwt
 LOGIN_REDIRECT_URL = '/' + DEV_DASHBOARD_SETTINGS['dashboard_url']
-MICROSOFT_CALLBACK_PATH = "api/auth/microsoft/callback"
-MICROSOFT_SIGNIN_PATH = "api/auth/microsoft/signin"
+JWT_3RD_PREFIX = 'api'
 # ----------------------------------------------
 
 #########################################
