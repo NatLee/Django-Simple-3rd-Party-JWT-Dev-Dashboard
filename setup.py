@@ -42,6 +42,9 @@ setuptools.setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         'Programming Language :: Python :: 3 :: Only',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
@@ -50,7 +53,7 @@ setuptools.setup(
     install_requires=[
         'django>=4.0.0',
         'djangorestframework',
-        'django-simple-third-party-jwt>=0.2.0',
+        'django-simple-third-party-jwt>=0.2.3',
         'drf-yasg',
         'django-bootstrap3'
     ],
